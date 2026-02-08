@@ -1,0 +1,4 @@
+ frontend - react , react-router-dom redux , react-redux
+ backend- express , mongoose, cors , dotenv , bcrypt, jsonwebtoken 
+
+ 
