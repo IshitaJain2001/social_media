@@ -9,13 +9,13 @@
   import dotenv from "dotenv"
   import connectToDb from "./config/db.config.js"
   import userRouter from "./routers/userRouter.js"
-
+import cookieParser from "cookie-parser"
 import { verifyTransport } from "./services/otpservice.js"
 
   dotenv.config()
 
   const app = e()
-
+app.use(cookieParser())
   app.use(cors())
   app.use(e.json())
   app.use("/users", userRouter)

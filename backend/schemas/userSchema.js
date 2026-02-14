@@ -18,7 +18,9 @@ unique: true
         required: true,
         validate : (val)=>{
             return validator.isStrongPassword(val)
-        }
+        },
+        minlength:8,
+        maxlength: 15
 },
     email :{
         type: String,
