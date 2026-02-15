@@ -8,6 +8,7 @@ import Login from './components/Login'
 import Dashboard from './components/Dashboard'
 import './App.css'
 
+//bottlenecks - avoid 
 function ProtectedRoute({ children }) {
   const isLoggedIn = useSelector(state => state.isLoggedIn)
   return isLoggedIn ? children : <Navigate to="/login" />

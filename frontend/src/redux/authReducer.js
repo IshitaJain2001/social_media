@@ -1,7 +1,7 @@
 import { LOGIN, LOGOUT } from './authActions'
 
 const initialState = {
-  isLoggedIn: localStorage.getItem('isLoggedIn') === 'true' || false,
+  isLoggedIn: localStorage.getItem('isLoggedIn') === true || false,
   user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
   token: localStorage.getItem('token') || null
 }
@@ -12,7 +12,7 @@ export default function authReducer(state = initialState, action) {
       const { token, user } = action.payload
       localStorage.setItem('token', token)
       localStorage.setItem('user', JSON.stringify(user))
-      localStorage.setItem('isLoggedIn', 'true')
+      localStorage.setItem('isLoggedIn', true)
       return {
         ...state,
         isLoggedIn: true,

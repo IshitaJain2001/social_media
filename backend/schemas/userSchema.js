@@ -14,20 +14,16 @@ required: true,
 unique: true
     },
     password:{
-        typr:String,
+        type: String,
         required: true,
-        validate : (val)=>{
-            return validator.isStrongPassword(val)
-        },
-        minlength:8,
-        maxlength: 15
-},
+        minlength: 6
+    },
     email :{
         type: String,
         required: true,
-        validate: (text)=>{
-    return validator.isEmail(text)
-        }
+        unique: true,
+        lowercase: true,
+        trim: true
     },
     otp:{
 type: String
@@ -36,7 +32,7 @@ type: String
 type: Date
     },
     isVerified:{
-type: boolean,
+type: Boolean,
 default : false
     }
     })

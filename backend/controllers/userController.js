@@ -1,7 +1,7 @@
  import bcrypt from "bcrypt"
   import otpgenerator from "otp-generator"
  import userModel from "../schemas/userSchema.js"
- import { sendOTP } from "../services/otpservice"
+ import { sendOTP } from "../services/otpservice.js"
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 dotenv.config()
@@ -37,29 +37,41 @@ const otp=  otpgenerator.generate(6, {
   specialChars: false     
 })
 
-const user=  new userModel({
- email,password:hashedPassword,userName,lastName,firstName, otp,    
- otpExpires: new Date(Date.now()+ 2*60*1000), isVerified: false
+const user = new userModel({
+  email,
+  password: hashedPassword,
+  userName,
+  lastName,
+  firstName,
+  otp,    
+  otpExpires: new Date(Date.now() + 10*60*1000),
+  isVerified: false
 })
-const isOTPsent= await sendOTP(email,otp)
+
+
+await user.save()
+
+const isOTPsent = await sendOTP(email, otp)
 
 if(!isOTPsent){
-    return res.status(500).json({
-        message:"otp sent failed",
-     id:   user._id,email: user.email
-    })
+  return res.status(500).json({
+    message:"otp sent failed",
+    userId: user._id,
+    email: user.email
+  })
 }
 
- return res.status(201).json({
-     message:"otp sent successfully ",
-     userId: user._id,
-     email: user.email
-  })
+return res.status(201).json({
+  message:"otp sent successfully",
+  userId: user._id,
+  email: user.email
+})
  } catch (error) {
-   return res.status(400).json({
-     message: error
-   })  
- }
+    console.error("Registration error:", error)
+    return res.status(400).json({
+      message: error.message || "Registration failed"
+    })  
+  }
  
  }
 
@@ -101,10 +113,16 @@ if(otp== user.otp){
     {userId: user._id, userName: user.userName, email : user.email},
 process.env.SECRET_KEY, {expiresIn:"7d"}
    )
-  return res.status(200).cookie(token,"token" ).json({
-    message:"otp verified successfully !!",
-  
-    userName:user.userName
+ res.status(200)
+  .cookie('token', token, {
+    httpOnly: true,
+    secure: true
+  })
+  .json({
+    message: "verified",
+    userId: user._id,
+    userName: user.userName,
+    isLoggedIn: true
   })
 }
 else{
@@ -119,27 +137,60 @@ else{
 }
  }
 
- export async function login(req,res){
-    let {userName,password} = req.body
-    if(!userName || !password){
-      return res.status(400).json({
-        message:"username or password is missing "
-      })
-    }
+ export async function login(req, res) {
+   try {
+     const { userName, password } = req.body
 
-    let user= await userModel.findOne({userName:userName})
+     if (!userName || !password) {
+       return res.status(400).json({
+         message: "username or password is missing"
+       })
+     }
 
+     const user = await userModel.findOne({ userName: userName })
 
-    if(!user){
-      return res.status(400).json({
-        message:"user not found"
-      })    }
+     if (!user) {
+       return res.status(400).json({
+         message: "user not found"
+       })
+     }
 
-   const isVerified=    bcrypt.compare(password, user.password)
+     if (!user.isVerified) {
+       return res.status(403).json({
+         message: "please verify your email first"
+       })
+     }
 
-   if(!isVerified){
-    return res.status(400).json({
-      message: "invalid credentials "
-    })
+     const isPasswordValid = await bcrypt.compare(password, user.password)
+
+     if (!isPasswordValid) {
+       return res.status(400).json({
+         message: "invalid credentials"
+       })
+     }
+
+     const token = jwt.sign(
+       { userId: user._id, userName: user.userName, email: user.email },
+       process.env.SECRET_KEY,
+       { expiresIn: "7d" }
+     )
+
+     return res.status(200)
+       .cookie('token', token, {
+         httpOnly: true,
+         secure: true,
+         sameSite: 'strict'
+       })
+       .json({
+         message: "login successful",
+         token: token,
+         userId: user._id,
+         userName: user.userName,
+         isLoggedIn: true
+       })
+   } catch (error) {
+     return res.status(500).json({
+       message: "something went wrong"
+     })
    }
-  }
+ }
