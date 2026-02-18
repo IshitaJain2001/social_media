@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import validator from "validator"
+
   const userSchema= new Schema({
     firstName:{
         type:String,
@@ -32,13 +32,20 @@ type: String
 type: Date
     },
     isVerified:{
-type: Boolean,
-default : false
+      type: Boolean,
+      default: false
+    },
+    bio: {
+      type: String,
+      default: "",
+      maxlength: 500
+    },
+    profilePicture: {
+      type: String,
+      default: null
     }
     })
 
 
-   const userModel= model("Users", userSchema)
-   export default userModel;
-
-//    gmail -> app password 
+   const userModel = model("Users", userSchema)
+   export default userModel

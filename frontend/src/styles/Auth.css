@@ -92,6 +92,21 @@
   margin-top: 5px;
 }
 
+.password-errors {
+  padding: 10px;
+  background: #fff3cd;
+  border-left: 3px solid #ffc107;
+  border-radius: 5px;
+  margin-top: 8px;
+}
+
+.password-error-item {
+  color: #856404;
+  font-size: 12px;
+  margin: 4px 0;
+  line-height: 1.4;
+}
+
 .info-text {
   text-align: center;
   color: #666;

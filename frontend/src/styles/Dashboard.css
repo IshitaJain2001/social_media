@@ -29,6 +29,30 @@
   margin-bottom: 30px;
 }
 
+.dashboard-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.profile-btn {
+  padding: 12px 30px;
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-btn:hover {
+  background: #667eea;
+  color: white;
+}
+
 .logout-btn {
   padding: 12px 40px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

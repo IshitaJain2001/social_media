@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { validatePassword, validateEmail, validateUserName } from '../utils/validation'
 import '../styles/Auth.css'
 
 export default function Register() {
@@ -12,16 +13,53 @@ export default function Register() {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [passwordErrors, setPasswordErrors] = useState([])
   const navigate = useNavigate()
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+    setForm({ ...form, [name]: value })
+
+    if (name === 'password') {
+      setPasswordErrors(validatePassword(value))
+    }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError('')
+
+    if (!form.firstName.trim()) {
+      setError('First name required')
+      setLoading(false)
+      return
+    }
+
+    if (!form.userName.trim()) {
+      setError('Username required')
+      setLoading(false)
+      return
+    }
+
+    const userNameError = validateUserName(form.userName)
+    if (userNameError) {
+      setError(userNameError)
+      setLoading(false)
+      return
+    }
+
+    if (!validateEmail(form.email)) {
+      setError('Invalid email')
+      setLoading(false)
+      return
+    }
+
+    if (passwordErrors.length > 0) {
+      setError('Password: ' + passwordErrors.join(', '))
+      setLoading(false)
+      return
+    }
 
     try {
       const res = await fetch('http://localhost:5000/users/register', {
@@ -90,6 +128,13 @@ export default function Register() {
             onChange={handleChange} 
             required 
           />
+          {passwordErrors.length > 0 && (
+            <div className="password-errors">
+              {passwordErrors.map((err, idx) => (
+                <p key={idx} className="password-error-item">• {err}</p>
+              ))}
+            </div>
+          )}
           {error && <p className="error">{error}</p>}
           <button type="submit" disabled={loading}>
             {loading ? 'Registering...' : 'Register'}

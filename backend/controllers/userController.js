@@ -5,6 +5,7 @@
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 dotenv.config()
+
 export  async function register(req,res){
 const {email,password,userName,lastName,firstName} = req.body
 
@@ -48,7 +49,6 @@ const user = new userModel({
   isVerified: false
 })
 
-
 await user.save()
 
 const isOTPsent = await sendOTP(email, otp)
@@ -74,9 +74,6 @@ return res.status(201).json({
   }
  
  }
-
-
-
 
 
 
@@ -107,9 +104,8 @@ if(otp== user.otp){
   user.otp= null
   user.otpExpires= null
   await user.save()
- 
 
- const token=  jwt.sign(
+  const token=  jwt.sign(
     {userId: user._id, userName: user.userName, email : user.email},
 process.env.SECRET_KEY, {expiresIn:"7d"}
    )
@@ -137,7 +133,75 @@ else{
 }
  }
 
- export async function login(req, res) {
+ export async function updateProfile(req, res) {
+  try {
+    const { userId, bio, profilePicture } = req.body
+
+    if (!userId) {
+      return res.status(400).json({
+        message: "userId required"
+      })
+    }
+
+    const user = await userModel.findById(userId)
+
+    if (!user) {
+      return res.status(404).json({
+        message: "user not found"
+      })
+    }
+
+    if (bio) user.bio = bio
+    if (profilePicture) user.profilePicture = profilePicture
+
+    await user.save()
+
+    return res.status(200).json({
+      message: "profile updated",
+      bio: user.bio,
+      profilePicture: user.profilePicture
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: "something went wrong"
+    })
+  }
+}
+
+export async function getProfile(req, res) {
+  try {
+    const { userId } = req.params
+
+    if (!userId) {
+      return res.status(400).json({
+        message: "userId required"
+      })
+    }
+
+    const user = await userModel.findOne({_id:userId})
+
+    if (!user) {
+      return res.status(404).json({
+        message: "user not found"
+      })
+    }
+
+    return res.status(200).json({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userName: user.userName,
+      email: user.email,
+      bio: user.bio,
+      profilePicture: user.profilePicture
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: "something went wrong"
+    })
+  }
+}
+
+export async function login(req, res) {
    try {
      const { userName, password } = req.body
 

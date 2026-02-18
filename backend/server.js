@@ -1,10 +1,4 @@
- //express 
- //dotenv configure
- // cors - middlewaare 
- // express instance 
- 
- 
-  import e from "express"
+ import e from "express"
   import cors from "cors"
   import dotenv from "dotenv"
   import connectToDb from "./config/db.config.js"
@@ -21,7 +15,8 @@ import { verifyTransport } from "./services/otpservice.js"
     credentials: true
   }))
   app.use(cookieParser())
-  app.use(e.json())
+  app.use(e.json({ limit: '50mb' }))
+  app.use(e.urlencoded({ limit: '50mb', extended: true }))
   app.use("/users", userRouter)
 
   verifyTransport()

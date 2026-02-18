@@ -6,9 +6,10 @@ import Register from './components/Register'
 import VerifyOtp from './components/VerifyOtp'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
+import Profile from './components/Profile'
+import EditProfile from './components/EditProfile'
 import './App.css'
 
-//bottlenecks - avoid 
 function ProtectedRoute({ children }) {
   const isLoggedIn = useSelector(state => state.isLoggedIn)
   return isLoggedIn ? children : <Navigate to="/login" />
@@ -23,6 +24,8 @@ function AppRoutes() {
       <Route path="/verify-otp" element={!isLoggedIn ? <VerifyOtp /> : <Navigate to="/dashboard" />} />
       <Route path="/login" element={!isLoggedIn ? <Login /> : <Navigate to="/dashboard" />} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
       <Route path="/" element={<Navigate to={isLoggedIn ? '/dashboard' : '/register'} />} />
     </Routes>
   )

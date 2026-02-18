@@ -18,9 +18,14 @@ export default function Dashboard() {
       <div className="dashboard-container">
         <h1>Welcome, {user?.userName}!</h1>
         <p>You are logged in successfully.</p>
-        <button onClick={handleLogout} className="logout-btn">
-          Logout
-        </button>
+        <div className="dashboard-buttons">
+          <button onClick={() => navigate('/profile')} className="profile-btn">
+            View Profile
+          </button>
+          <button onClick={handleLogout} className="logout-btn">
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   )
