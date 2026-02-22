@@ -1,0 +1,311 @@
+.search-friends-container,
+.friends-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  padding-top: 40px;
+}
+
+.search-friends-box,
+.friends-box {
+  background: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 600px;
+}
+
+.search-friends-box h2,
+.friends-box h2 {
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.search-friends-box form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.search-friends-box input {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.search-friends-box input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.search-friends-box button,
+.search-btn,
+.back-btn,
+.btn-add-first {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.search-friends-box button:hover:not(:disabled),
+.search-btn:hover,
+.back-btn:hover,
+.btn-add-first:hover {
+  opacity: 0.9;
+}
+
+.search-friends-box button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.search-btn {
+  padding: 8px 15px;
+  font-size: 12px;
+  margin-left: auto;
+}
+
+.results {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.no-results {
+  text-align: center;
+  color: #999;
+  padding: 30px;
+}
+
+.result-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: background 0.2s;
+}
+
+.result-card:hover {
+  background: #f9f9f9;
+}
+
+.result-avatar {
+  flex-shrink: 0;
+}
+
+.result-avatar img,
+.avatar-placeholder {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-placeholder {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.result-info {
+  flex: 1;
+}
+
+.result-info h3 {
+  color: #333;
+  font-size: 16px;
+  margin: 0 0 4px 0;
+}
+
+.result-info p {
+  color: #999;
+  font-size: 12px;
+  margin: 0;
+}
+
+.result-info p.email {
+  color: #666;
+  font-size: 11px;
+}
+
+.result-action {
+  flex-shrink: 0;
+}
+
+.btn-add,
+.btn-remove {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-add {
+  background: #27ae60;
+  color: white;
+}
+
+.btn-add:hover {
+  background: #229954;
+}
+
+.btn-remove {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-remove:hover {
+  background: #c0392b;
+}
+
+.friends-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.friends-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.no-friends {
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.no-friends p {
+  color: #999;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.btn-add-first {
+  margin-top: 15px;
+}
+
+.friends-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.friend-card {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #eee;
+  transition: all 0.2s;
+}
+
+.friend-card:hover {
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+  transform: translateY(-3px);
+}
+
+.friend-avatar {
+  margin-bottom: 15px;
+}
+
+.friend-avatar img,
+.friend-avatar .avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.friend-info h3 {
+  color: #333;
+  font-size: 14px;
+  margin: 10px 0 4px 0;
+}
+
+.friend-info p {
+  color: #999;
+  font-size: 12px;
+  margin: 0 0 15px 0;
+}
+
+.friend-card .btn-remove {
+  width: 100%;
+}
+
+.back-btn {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.error {
+  color: #e74c3c;
+  padding: 12px;
+  background: #fadbd8;
+  border-left: 3px solid #e74c3c;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 600px) {
+  .search-friends-box,
+  .friends-box {
+    padding: 25px;
+  }
+
+  .search-friends-box form {
+    flex-direction: column;
+  }
+
+  .search-friends-box button {
+    width: 100%;
+  }
+
+  .result-card {
+    flex-wrap: wrap;
+  }
+
+  .friends-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .search-btn {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .friends-grid {
+    grid-template-columns: 1fr;
+  }
+}

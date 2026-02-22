@@ -8,6 +8,8 @@ import Login from './components/Login'
 import Dashboard from './components/Dashboard'
 import Profile from './components/Profile'
 import EditProfile from './components/EditProfile'
+import SearchFriends from './components/SearchFriends'
+import FriendsList from './components/FriendsList'
 import './App.css'
 
 function ProtectedRoute({ children }) {
@@ -26,6 +28,8 @@ function AppRoutes() {
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+      <Route path="/search-friends" element={<ProtectedRoute><SearchFriends /></ProtectedRoute>} />
+      <Route path="/friends-list" element={<ProtectedRoute><FriendsList /></ProtectedRoute>} />
       <Route path="/" element={<Navigate to={isLoggedIn ? '/dashboard' : '/register'} />} />
     </Routes>
   )

@@ -201,6 +201,139 @@ export async function getProfile(req, res) {
   }
 }
 
+export async function searchFriends(req, res) {
+  try {
+    const { query, userId } = req.query
+
+    if (!query) {
+      return res.status(400).json({
+        message: "search query required"
+      })
+    }
+
+    const users = await userModel.find({
+      $or: [
+        { userName: { $regex: query, $options: 'i' } },
+        { email: { $regex: query, $options: 'i' } }
+      ]
+    }).select('_id userName firstName lastName email profilePicture')
+
+    const filteredUsers = users.filter(user => user._id.toString() !== userId)
+
+    return res.status(200).json({
+      users: filteredUsers
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: "something went wrong"
+    })
+  }
+}
+
+export async function addFriend(req, res) {
+  try {
+    const { userId, friendId } = req.body
+
+    if (!userId || !friendId) {
+      return res.status(400).json({
+        message: "userId and friendId required"
+      })
+    }
+
+    const user = await userModel.findById(userId)
+    const friend = await userModel.findById(friendId)
+
+    if (!user || !friend) {
+      return res.status(404).json({
+        message: "user not found"
+      })
+    }
+
+    if (user.friends.includes(friendId)) {
+      return res.status(400).json({
+        message: "already friends"
+      })
+    }
+
+    user.friends.push(friendId)
+    friend.friends.push(userId)
+
+    await user.save()
+    await friend.save()
+
+    return res.status(200).json({
+      message: "friend added successfully"
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: "something went wrong"
+    })
+  }
+}
+
+export async function removeFriend(req, res) {
+  try {
+    const { userId, friendId } = req.body
+
+    if (!userId || !friendId) {
+      return res.status(400).json({
+        message: "userId and friendId required"
+      })
+    }
+
+    const user = await userModel.findById(userId)
+    const friend = await userModel.findById(friendId)
+
+    if (!user || !friend) {
+      return res.status(404).json({
+        message: "user not found"
+      })
+    }
+
+    user.friends = user.friends.filter(id => id.toString() !== friendId)
+    friend.friends = friend.friends.filter(id => id.toString() !== userId)
+
+    await user.save()
+    await friend.save()
+
+    return res.status(200).json({
+      message: "friend removed successfully"
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: "something went wrong"
+    })
+  }
+}
+
+export async function getFriends(req, res) {
+  try {
+    const { userId } = req.params
+
+    if (!userId) {
+      return res.status(400).json({
+        message: "userId required"
+      })
+    }
+
+    const user = await userModel.findById(userId).populate('friends', '_id userName firstName lastName email profilePicture')
+
+    if (!user) {
+      return res.status(404).json({
+        message: "user not found"
+      })
+    }
+
+    return res.status(200).json({
+      friends: user.friends
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: "something went wrong"
+    })
+  }
+}
+
 export async function login(req, res) {
    try {
      const { userName, password } = req.body

@@ -43,7 +43,11 @@ type: Date
     profilePicture: {
       type: String,
       default: null
-    }
+    },
+    friends: [{
+      type: String,
+      default: null
+    }]
     })
 
 
