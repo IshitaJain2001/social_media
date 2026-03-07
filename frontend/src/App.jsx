@@ -10,6 +10,9 @@ import Profile from './components/Profile'
 import EditProfile from './components/EditProfile'
 import SearchFriends from './components/SearchFriends'
 import FriendsList from './components/FriendsList'
+import Feed from './components/Feed'
+import Messages from './components/Messages'
+import Notifications from './components/Notifications'
 import './App.css'
 
 function ProtectedRoute({ children }) {
@@ -30,6 +33,9 @@ function AppRoutes() {
       <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
       <Route path="/search-friends" element={<ProtectedRoute><SearchFriends /></ProtectedRoute>} />
       <Route path="/friends-list" element={<ProtectedRoute><FriendsList /></ProtectedRoute>} />
+      <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
+      <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+      <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
       <Route path="/" element={<Navigate to={isLoggedIn ? '/dashboard' : '/register'} />} />
     </Routes>
   )

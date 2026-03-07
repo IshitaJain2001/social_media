@@ -334,6 +334,112 @@ export async function getFriends(req, res) {
   }
 }
 
+export async function followUser(req, res) {
+  try {
+    const { userId, followId } = req.body
+
+    if (!userId || !followId) {
+      return res.status(400).json({
+        message: "userId and followId required"
+      })
+    }
+
+    const user = await userModel.findById(userId)
+    const followUser = await userModel.findById(followId)
+
+    if (!user || !followUser) {
+      return res.status(404).json({
+        message: "user not found"
+      })
+    }
+
+    if (!user.following) user.following = []
+    if (!followUser.followers) followUser.followers = []
+
+    if (user.following.includes(followId)) {
+      return res.status(400).json({
+        message: "already following"
+      })
+    }
+
+    user.following.push(followId)
+    followUser.followers.push(userId)
+
+    await user.save()
+    await followUser.save()
+
+    return res.status(200).json({
+      message: "user followed"
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: "something went wrong"
+    })
+  }
+}
+
+export async function unfollowUser(req, res) {
+  try {
+    const { userId, followId } = req.body
+
+    if (!userId || !followId) {
+      return res.status(400).json({
+        message: "userId and followId required"
+      })
+    }
+
+    const user = await userModel.findById(userId)
+    const followUser = await userModel.findById(followId)
+
+    if (!user || !followUser) {
+      return res.status(404).json({
+        message: "user not found"
+      })
+    }
+
+    if (!user.following) user.following = []
+    if (!followUser.followers) followUser.followers = []
+
+    user.following = user.following.filter(id => id !== followId)
+    followUser.followers = followUser.followers.filter(id => id !== userId)
+
+    await user.save()
+    await followUser.save()
+
+    return res.status(200).json({
+      message: "user unfollowed"
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: "something went wrong"
+    })
+  }
+}
+
+export async function getStats(req, res) {
+  try {
+    const { userId } = req.params
+
+    const user = await userModel.findById(userId)
+
+    if (!user) {
+      return res.status(404).json({
+        message: "user not found"
+      })
+    }
+
+    return res.status(200).json({
+      friends: user.friends?.length || 0,
+      followers: user.followers?.length || 0,
+      following: user.following?.length || 0
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: "something went wrong"
+    })
+  }
+}
+
 export async function login(req, res) {
    try {
      const { userName, password } = req.body

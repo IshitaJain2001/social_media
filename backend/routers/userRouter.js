@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { login, register, verifyOtp, updateProfile, getProfile, searchFriends, addFriend, removeFriend, getFriends } from "../controllers/userController.js";
+import { login, register, verifyOtp, updateProfile, getProfile, searchFriends, addFriend, removeFriend, getFriends, followUser, unfollowUser, getStats } from "../controllers/userController.js";
 
 const userRouter = Router()
 
@@ -12,5 +12,8 @@ userRouter.get("/search-friends", searchFriends)
 userRouter.post("/add-friend", addFriend)
 userRouter.post("/remove-friend", removeFriend)
 userRouter.get("/friends/:userId", getFriends)
+userRouter.post("/follow", followUser)
+userRouter.post("/unfollow", unfollowUser)
+userRouter.get("/stats/:userId", getStats)
 
 export default userRouter

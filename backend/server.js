@@ -3,8 +3,11 @@
   import dotenv from "dotenv"
   import connectToDb from "./config/db.config.js"
   import userRouter from "./routers/userRouter.js"
-import cookieParser from "cookie-parser"
-import { verifyTransport } from "./services/otpservice.js"
+  import postRouter from "./routers/postRouter.js"
+  import messageRouter from "./routers/messageRouter.js"
+  import notificationRouter from "./routers/notificationRouter.js"
+  import cookieParser from "cookie-parser"
+  import { verifyTransport } from "./services/otpservice.js"
 
   dotenv.config()
 
@@ -18,6 +21,9 @@ import { verifyTransport } from "./services/otpservice.js"
   app.use(e.json({ limit: '50mb' }))
   app.use(e.urlencoded({ limit: '50mb', extended: true }))
   app.use("/users", userRouter)
+  app.use("/posts", postRouter)
+  app.use("/messages", messageRouter)
+  app.use("/notifications", notificationRouter)
 
   verifyTransport()
   connectToDb()

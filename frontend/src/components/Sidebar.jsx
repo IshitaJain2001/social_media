@@ -41,6 +41,30 @@ export default function Sidebar() {
 
         <div 
           className="sidebar-item"
+          onClick={() => navigate('/feed')}
+        >
+          <span className="sidebar-icon">📰</span>
+          <span className="sidebar-label">Feed</span>
+        </div>
+
+        <div 
+          className="sidebar-item"
+          onClick={() => navigate('/messages')}
+        >
+          <span className="sidebar-icon">💬</span>
+          <span className="sidebar-label">Messages</span>
+        </div>
+
+        <div 
+          className="sidebar-item"
+          onClick={() => navigate('/notifications')}
+        >
+          <span className="sidebar-icon">🔔</span>
+          <span className="sidebar-label">Notifications</span>
+        </div>
+
+        <div 
+          className="sidebar-item"
           onClick={() => navigate('/edit-profile')}
         >
           <span className="sidebar-icon">⚙️</span>

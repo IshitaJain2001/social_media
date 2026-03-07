@@ -47,7 +47,19 @@ type: Date
     friends: [{
       type: String,
       default: null
-    }]
+    }],
+    followers: [{
+      type: String,
+      default: null
+    }],
+    following: [{
+      type: String,
+      default: null
+    }],
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
     })
 
 
