@@ -1,6 +1,8 @@
  import e from "express"
   import cors from "cors"
   import dotenv from "dotenv"
+  import { createServer } from "http"
+  import { Server } from "socket.io"
   import connectToDb from "./config/db.config.js"
   import userRouter from "./routers/userRouter.js"
   import postRouter from "./routers/postRouter.js"
@@ -12,6 +14,64 @@
   dotenv.config()
 
   const app = e()
+  const httpServer = createServer(app)
+  const io = new Server(httpServer, {
+    cors: {
+      origin: 'http://localhost:5173',
+      credentials: true
+    }
+  })
+
+  const onlineUsers = new Map()
+
+  io.on('connection', (socket) => {
+    socket.on('user_connected', (userId) => {
+      onlineUsers.set(userId, socket.id)
+      io.emit('online_users', Array.from(onlineUsers.keys()))
+    })
+
+    socket.on('send_message', (data) => {
+      const { senderId, receiverId, message } = data
+      const receiverSocketId = onlineUsers.get(receiverId)
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit('receive_message', {
+          senderId,
+          message,
+          timestamp: new Date()
+        })
+      }
+    })
+
+    socket.on('typing', (data) => {
+      const { receiverId, senderName } = data
+      const receiverSocketId = onlineUsers.get(receiverId)
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit('user_typing', { senderName })
+      }
+    })
+
+    socket.on('stop_typing', (data) => {
+      const { receiverId } = data
+      const receiverSocketId = onlineUsers.get(receiverId)
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit('user_stop_typing')
+      }
+    })
+
+    socket.on('disconnect', () => {
+      let disconnectedUserId
+      for (let [userId, socketId] of onlineUsers.entries()) {
+        if (socketId === socket.id) {
+          disconnectedUserId = userId
+          onlineUsers.delete(userId)
+          break
+        }
+      }
+      if (disconnectedUserId) {
+        io.emit('online_users', Array.from(onlineUsers.keys()))
+      }
+    })
+  })
 
   app.use(cors({
     origin: 'http://localhost:5173',
@@ -25,10 +85,11 @@
   app.use("/messages", messageRouter)
   app.use("/notifications", notificationRouter)
 
+  app.set('io', io)
+
   verifyTransport()
   connectToDb()
 
-
-  app.listen(process.env.PORT, () => {
+  httpServer.listen(process.env.PORT, () => {
       console.log(`✓ Server running on port ${process.env.PORT}`)
   })

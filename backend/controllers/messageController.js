@@ -30,11 +30,14 @@ export async function sendMessage(req, res) {
     })
 
     return res.status(201).json({
-      message: "message sent"
+      message: "message sent",
+      success: true
     })
   } catch (error) {
+    console.error("Send message error:", error)
     return res.status(500).json({
-      message: "something went wrong"
+      message: error.message || "something went wrong",
+      success: false
     })
   }
 }

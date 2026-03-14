@@ -45,15 +45,18 @@ type: Date
       default: "https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg"
     },
     friends: [{
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'Users',
       default: null
     }],
     followers: [{
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'Users',
       default: null
     }],
     following: [{
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'Users',
       default: null
     }],
     createdAt: {
